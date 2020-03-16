@@ -30,24 +30,24 @@ def main():
 
 def build_menu():
     menu = gtk.Menu()
-    item_joke = gtk.MenuItem('Joke')
-    item_joke.connect('activate', joke)
-    menu.append(item_joke)
+    item_JP_Layout = gtk.MenuItem('JP_Layout')
+    item_JP_Layout.connect('activate', JP_Layout)
+    menu.append(item_JP_Layout)
     item_quit = gtk.MenuItem('Quit')
     item_quit.connect('activate', quit)
     menu.append(item_quit)
     menu.show_all()
     return menu
 
-def fetch_joke():
+def fetch_JP_Layout():
     with urlopen('http://api.icndb.com/jokes/random?limitTo=[nerdy]') as req:
-        msg = req.read();
+        msg = req.read()
         msg = msg.decode('utf-8')
-        joke = json.loads(msg)['value']['joke']
-    return joke
+        JP_Layout = json.loads(msg)['value']['JP_Layout']
+    return JP_Layout
 
-def joke(_):
-    notify.Notification.new("<b>Joke</b>", fetch_joke(), None).show()
+def JP_Layout(_):
+    notify.Notification.new("<b>JP_Layout</b>", fetch_JP_Layout(), None).show()
 
 def quit(_):
     notify.uninit()
