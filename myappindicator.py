@@ -30,6 +30,9 @@ def main():
 
 def build_menu():
     menu = gtk.Menu()
+    item_EN_Layout = gtk.MenuItem('EN_Layout')
+    item_EN_Layout.connect('activate', EN_Layout)
+    menu.append(item_EN_Layout)
     item_JP_Layout = gtk.MenuItem('JP_Layout')
     item_JP_Layout.connect('activate', JP_Layout)
     menu.append(item_JP_Layout)
@@ -38,6 +41,16 @@ def build_menu():
     menu.append(item_quit)
     menu.show_all()
     return menu
+
+def fetch_EN_Layout():
+    with urlopen('http://api.icndb.com/jokes/random?limitTo=[nerdy]') as req:
+        msg = req.read()
+        msg = msg.decode('utf-8')
+        EN_Layout = json.loads(msg)['value']['EN_Layout']
+    return EN_Layout
+
+def EN_Layout(_):
+    notify.Notification.new("<b>EN_Layout</b>", fetch_EN_Layout(), None).show()
 
 def fetch_JP_Layout():
     with urlopen('http://api.icndb.com/jokes/random?limitTo=[nerdy]') as req:
