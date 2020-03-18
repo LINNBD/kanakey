@@ -22,7 +22,7 @@ from gi.repository import Notify as notify
 APPINDICATOR_ID = 'myappindicator'
 
 def main():
-    indicator = appindicator.Indicator.new("customtray", "semi-starred-symbolic", appindicator.IndicatorCategory.APPLICATION_STATUS)
+    indicator = appindicator.Indicator.new("customtray", os.path.abspath('icon.svg'), appindicator.IndicatorCategory.APPLICATION_STATUS)
     indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
     indicator.set_menu(build_menu())
     notify.init(APPINDICATOR_ID)
@@ -30,10 +30,10 @@ def main():
 
 def build_menu():
     menu = gtk.Menu()
-    item_EN_Layout = gtk.MenuItem('EN_Layout')
+    item_EN_Layout = gtk.MenuItem('English(US)')
     item_EN_Layout.connect('activate', EN_Layout)
     menu.append(item_EN_Layout)
-    item_JP_Layout = gtk.MenuItem('JP_Layout')
+    item_JP_Layout = gtk.MenuItem('Japanese(日本語)')
     item_JP_Layout.connect('activate', JP_Layout)
     menu.append(item_JP_Layout)
     item_quit = gtk.MenuItem('Quit')
@@ -42,25 +42,28 @@ def build_menu():
     menu.show_all()
     return menu
 
-def fetch_EN_Layout():
-    with urlopen('http://api.icndb.com/jokes/random?limitTo=[nerdy]') as req:
-        msg = req.read()
-        msg = msg.decode('utf-8')
-        EN_Layout = json.loads(msg)['value']['EN_Layout']
-    return EN_Layout
+# def fetch_EN_Layout():
+#     with urlopen('http://api.icndb.com/jokes/random?limitTo=[nerdy]') as req:
+#         msg = req.read()
+#         msg = msg.decode('utf-8')
+#         EN_Layout = json.loads(msg)['value']['EN_Layout']
+#     return EN_Layout
+
+# def EN_Layout(_):
+#     notify.Notification.new("<b>EN_Layout</b>", fetch_EN_Layout(), None).show()
 
 def EN_Layout(_):
-    notify.Notification.new("<b>EN_Layout</b>", fetch_EN_Layout(), None).show()
+    notify.Notification.new("Switched to English Input").show()
 
-def fetch_JP_Layout():
-    with urlopen('http://api.icndb.com/jokes/random?limitTo=[nerdy]') as req:
-        msg = req.read()
-        msg = msg.decode('utf-8')
-        JP_Layout = json.loads(msg)['value']['JP_Layout']
-    return JP_Layout
+# def fetch_JP_Layout():
+#     with urlopen('http://api.icndb.com/jokes/random?limitTo=[nerdy]') as req:
+#         msg = req.read()
+#         msg = msg.decode('utf-8')
+#         JP_Layout = json.loads(msg)['value']['JP_Layout']
+#     return JP_Layout
 
 def JP_Layout(_):
-    notify.Notification.new("<b>JP_Layout</b>", fetch_JP_Layout(), None).show()
+    notify.Notification.new("Switched to Japanese Input").show()
 
 def quit(_):
     notify.uninit()
