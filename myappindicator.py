@@ -42,28 +42,17 @@ def build_menu():
     menu.show_all()
     return menu
 
-# def fetch_EN_Layout():
-#     with urlopen('http://api.icndb.com/jokes/random?limitTo=[nerdy]') as req:
-#         msg = req.read()
-#         msg = msg.decode('utf-8')
-#         EN_Layout = json.loads(msg)['value']['EN_Layout']
-#     return EN_Layout
-
-# def EN_Layout(_):
-#     notify.Notification.new("<b>EN_Layout</b>", fetch_EN_Layout(), None).show()
+def fetch_EN_Layout():
+    os.system("setxkbmap -layout us")
 
 def EN_Layout(_):
-    notify.Notification.new("Switched to English Input").show()
+    notify.Notification.new("Switched to English Input", fetch_EN_Layout(), None).show()
 
-# def fetch_JP_Layout():
-#     with urlopen('http://api.icndb.com/jokes/random?limitTo=[nerdy]') as req:
-#         msg = req.read()
-#         msg = msg.decode('utf-8')
-#         JP_Layout = json.loads(msg)['value']['JP_Layout']
-#     return JP_Layout
+def fetch_JP_Layout():
+    os.system("setxkbmap -layout jp kana")
 
 def JP_Layout(_):
-    notify.Notification.new("Switched to Japanese Input").show()
+    notify.Notification.new("Switched to Japanese Input", fetch_JP_Layout(), None).show()
 
 def quit(_):
     notify.uninit()
