@@ -19,7 +19,7 @@ from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Notify as notify
 
 
-APPINDICATOR_ID = 'myappindicator'
+APPINDICATOR_ID = 'kanakey'
 
 def main():
     indicator = appindicator.Indicator.new("customtray", os.path.abspath('icon.svg'), appindicator.IndicatorCategory.APPLICATION_STATUS)
