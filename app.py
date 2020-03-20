@@ -2,6 +2,7 @@ import os
 import gi
 import signal
 import json
+import subprocess
 
 from urllib import request
 from urllib.error import URLError
@@ -18,7 +19,15 @@ from gi.repository import Notify as notify
 
 APPINDICATOR_ID = 'kanakey'
 
+find_current_layout = ''
+
+def set_current_layout():
+    set_command = 'setxkbmap -layout %s'%find_current_layout
+    os.system(set_command)
+    
+
 def main():
+    find_current_layout = fetch_current_layout()
     indicator = appindicator.Indicator.new("customtray", os.path.abspath('icon.svg'), appindicator.IndicatorCategory.APPLICATION_STATUS)
     indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
     indicator.set_menu(build_menu())
@@ -42,6 +51,21 @@ def build_menu():
 def fetch_EN_Layout():
     os.system("setxkbmap -layout us")
 
+#Find current  layout
+ 
+def fetch_current_layout():
+    temp_layout = subprocess.check_output("setxkbmap -query | grep layout", shell=True)
+    temp_layout = temp_layout.split(' ')
+    temp_layout = temp_layout[-1]
+    if ',' in temp_layout:
+        temp_layout = temp_layout.split(',')
+    else:
+        temp_layout = temp_layout[:-1]
+    current_layout = temp_layout
+    return current_layout
+
+ 
+
 def EN_Layout(_):
     notify.Notification.new("Switched to English Input", fetch_EN_Layout(), None).show()
 
@@ -52,6 +76,7 @@ def JP_Layout(_):
     notify.Notification.new("Switched to Japanese Input", fetch_JP_Layout(), None).show()
 
 def quit(_):
+    set_current_layout()
     notify.uninit()
     gtk.main_quit()
 
