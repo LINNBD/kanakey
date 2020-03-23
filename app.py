@@ -16,7 +16,6 @@ from gi.repository import Gtk as gtk
 from gi.repository import AppIndicator3 as appindicator
 from gi.repository import Notify as notify
 
-
 APPINDICATOR_ID = 'kanakey'
 
 find_current_layout=""
@@ -26,8 +25,8 @@ def set_current_layout():
     global find_current_layout
     set_command = 'setxkbmap -layout %s'%find_current_layout
     os.system(set_command)
-    
 
+    
 def main():
     notify.init(APPINDICATOR_ID)
     global find_current_layout
@@ -54,11 +53,13 @@ def build_menu():
     menu.show_all()
     return menu
 
-def fetch_EN_Layout():
-    os.system("setxkbmap -layout us")
+#Detect current layout
 
-#Find current  layout
+def set_current_layout():
+    set_command = 'setxkbmap -layout %s'%current_layout
+    os.system(set_command)
  
+
 def fetch_current_layout():
     temp_layout = str(subprocess.check_output("setxkbmap -query | grep layout", shell=True))
     temp_layout = temp_layout.split(' ')
@@ -74,7 +75,8 @@ def fetch_current_layout():
     notify.Notification.new("current layout %s"%current_layout).show()
     return current_layout
 
- 
+def fetch_EN_Layout():
+    os.system("setxkbmap -layout us")
 
 def EN_Layout(_):
     notify.Notification.new("Switched to English Input", fetch_EN_Layout(), None).show()
