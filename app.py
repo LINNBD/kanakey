@@ -19,20 +19,26 @@ from gi.repository import Notify as notify
 
 APPINDICATOR_ID = 'kanakey'
 
-find_current_layout = ''
+find_current_layout=""
+
 
 def set_current_layout():
+    global find_current_layout
     set_command = 'setxkbmap -layout %s'%find_current_layout
     os.system(set_command)
     
 
 def main():
-    find_current_layout = fetch_current_layout()
+    notify.init(APPINDICATOR_ID)
+    global find_current_layout
+    if find_current_layout == "":
+        find_current_layout = fetch_current_layout()
     indicator = appindicator.Indicator.new("customtray", os.path.abspath('icon.svg'), appindicator.IndicatorCategory.APPLICATION_STATUS)
     indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
     indicator.set_menu(build_menu())
-    notify.init(APPINDICATOR_ID)
+    
     gtk.main()
+
 
 def build_menu():
     menu = gtk.Menu()
@@ -54,14 +60,18 @@ def fetch_EN_Layout():
 #Find current  layout
  
 def fetch_current_layout():
-    temp_layout = subprocess.check_output("setxkbmap -query | grep layout", shell=True)
+    temp_layout = str(subprocess.check_output("setxkbmap -query | grep layout", shell=True))
     temp_layout = temp_layout.split(' ')
+    notify.Notification.new("after split with space %s" %temp_layout).show()
     temp_layout = temp_layout[-1]
-    if ',' in temp_layout:
-        temp_layout = temp_layout.split(',')
-    else:
-        temp_layout = temp_layout[:-1]
+    notify.Notification.new("assign last value %s"%temp_layout).show()
+    # if ',' in temp_layout:
+    #     #temp_layout = temp_layout.split(',')
+    #     temp_layout = temp_layout[:-3]
+    # else:
+    temp_layout = temp_layout[:-3]
     current_layout = temp_layout
+    notify.Notification.new("current layout %s"%current_layout).show()
     return current_layout
 
  
